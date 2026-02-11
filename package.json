@@ -11,6 +11,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@auth0/auth0-fastify-api": "^1.1.0",
     "@fastify/cors": "^11.2.0",
     "@fastify/sensible": "^6.0.4",
     "@prisma/client": "^7.3.0",
