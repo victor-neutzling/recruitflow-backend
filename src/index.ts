@@ -1,10 +1,17 @@
-import Fastify, { type FastifyError } from "fastify";
 import "dotenv/config";
+
+import Fastify, { type FastifyError } from "fastify";
 
 import fastifySensible from "@fastify/sensible";
 import fastifyCors from "@fastify/cors";
 
 import auth0 from "@auth0/auth0-fastify-api";
+import {
+  serializerCompiler,
+  validatorCompiler,
+  type ZodTypeProvider,
+} from "fastify-type-provider-zod";
+import { userRoutes } from "./modules/user/user.routes.js";
 
 const fastify = Fastify({
   logger: {
@@ -12,7 +19,10 @@ const fastify = Fastify({
       target: "pino-pretty",
     },
   },
-});
+}).withTypeProvider<ZodTypeProvider>();
+
+fastify.setValidatorCompiler(validatorCompiler);
+fastify.setSerializerCompiler(serializerCompiler);
 
 fastify.register(fastifySensible);
 fastify.register(fastifyCors, {
@@ -57,6 +67,8 @@ fastify.get(
     reply.send({ auth: true, token: request.headers.authorization });
   },
 );
+
+fastify.register(userRoutes, { prefix: "/users" });
 
 async function main() {
   try {
