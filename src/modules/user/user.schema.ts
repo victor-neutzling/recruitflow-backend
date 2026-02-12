@@ -6,14 +6,12 @@ export const createUserBodySchema = z.object({
   auth0Id: z.string(),
 });
 
-export const userResponseSchema = z
-  .object({
-    id: z.string(),
-    auth0Id: z.string(),
-    name: z.string(),
-    email: z.string(),
-  })
-  .nullable();
+export const userResponseSchema = z.object({
+  id: z.string(),
+  auth0Id: z.string(),
+  name: z.string(),
+  email: z.string(),
+});
 
 export type createUserPayload = z.infer<typeof createUserBodySchema>;
 export type userResponse = z.infer<typeof userResponseSchema>;

@@ -14,7 +14,7 @@ export const userRoutes: FastifyPluginAsync = async (fastify, options) => {
     {
       schema: {
         response: {
-          "2xx": userResponseSchema,
+          "200": userResponseSchema,
         },
       },
     },
@@ -32,7 +32,7 @@ export const userRoutes: FastifyPluginAsync = async (fastify, options) => {
         body: createUserBodySchema,
 
         response: {
-          "2xx": userResponseSchema,
+          "200": userResponseSchema,
         },
       },
     },

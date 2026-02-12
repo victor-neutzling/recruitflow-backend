@@ -5,8 +5,8 @@ import type { createUserPayload } from "./user.schema.js";
 export class UserService {
   constructor(private fastify: FastifyInstance) {}
 
-  async registerUser(payload: createUserPayload) {
-    return await repo.create(payload);
+  registerUser(payload: createUserPayload) {
+    return repo.create(payload);
   }
 
   async login(id: string) {

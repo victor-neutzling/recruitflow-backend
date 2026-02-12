@@ -39,6 +39,7 @@ model Application {
   appliedAt   DateTime? @map("applied_at")
 
   status String // applied / reply / interview / offer / rejected / accepted
+  columnIndex Int @map("column_index")
 
   user             User              @relation(fields: [userId], references: [id])
   applicationLinks ApplicationLink[]
