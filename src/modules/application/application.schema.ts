@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const createApplicationBodySchema = z //serves for edit application too i believe
+const createApplicationBodySchema = z
   .object({
     title: z.string(),
     companyName: z.string(),
