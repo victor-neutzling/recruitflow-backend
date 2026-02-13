@@ -13,6 +13,7 @@ import {
 } from "fastify-type-provider-zod";
 import { authRoutes } from "./modules/auth/auth.routes.js";
 import { applicationRoutes } from "./modules/application/application.routes.js";
+import { applicationLinkRoutes } from "./modules/application-link/application-link.routes.js";
 
 const fastify = Fastify({
   logger: {
@@ -56,6 +57,9 @@ fastify.setErrorHandler((error: FastifyError, request, reply) => {
 
 fastify.register(authRoutes, { prefix: "/auth" });
 fastify.register(applicationRoutes, { prefix: "/applications" });
+fastify.register(applicationLinkRoutes, {
+  prefix: "/applications/:applicationId/links",
+});
 
 async function main() {
   try {

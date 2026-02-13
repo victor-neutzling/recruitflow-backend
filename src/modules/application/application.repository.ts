@@ -61,7 +61,7 @@ class ApplicationRepository {
     });
   }
 
-  edit(auth0Id: string, id: string, payload: CreateApplicationPayload) {
+  update(auth0Id: string, id: string, payload: CreateApplicationPayload) {
     return prismaClient.application.updateManyAndReturn({
       where: {
         id,
@@ -73,7 +73,7 @@ class ApplicationRepository {
     });
   }
 
-  editMany(auth0Id: string, payload: BatchEditApplicationPayload) {
+  updateMany(auth0Id: string, payload: BatchEditApplicationPayload) {
     return prismaClient.$transaction(
       payload.map((item) =>
         prismaClient.application.updateMany({

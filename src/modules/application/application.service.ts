@@ -50,7 +50,7 @@ export class ApplicationService {
     applicationId: string,
     payload: CreateApplicationPayload,
   ) {
-    const [data] = await repo.edit(auth0Id, applicationId, payload);
+    const [data] = await repo.update(auth0Id, applicationId, payload);
 
     if (!data) {
       throw this.httpErrors.notFound();
@@ -72,7 +72,7 @@ export class ApplicationService {
       throw this.httpErrors.badRequest("payload should not be empty");
     }
 
-    return repo.editMany(auth0Id, payload);
+    return repo.updateMany(auth0Id, payload);
   }
 
   async deleteApplication(auth0Id: string, applicationId: string) {
