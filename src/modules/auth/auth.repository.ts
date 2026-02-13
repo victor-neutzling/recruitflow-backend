@@ -1,18 +1,22 @@
 import prismaClient from "@/libs/prismaClient.js";
-import type { createUserPayload } from "./auth.schema.js";
+import type { syncUserPayload } from "./auth.schema.js";
 
 class AuthRepository {
-  create(payload: createUserPayload, auth0Id: string) {
+  upsert(payload: syncUserPayload, auth0Id: string) {
     const { email, name } = payload;
 
-    return prismaClient.user.create({
-      data: { email, name, auth0Id },
+    return prismaClient.user.upsert({
+      where: { auth0Id },
+      update: { email, name },
+      create: { email, name, auth0Id },
     });
   }
-
-  findById(auth0Id: string) {
-    return prismaClient.user.findUnique({
+  findUserId(auth0Id: string) {
+    return prismaClient.user.findFirst({
       where: { auth0Id },
+      select: {
+        id: true,
+      },
     });
   }
 }

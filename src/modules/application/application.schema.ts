@@ -1,16 +1,16 @@
 import { z } from "zod";
 
-const createApplicationBodySchema = z
+export const createApplicationBodySchema = z // also serves for edit application
   .object({
     title: z.string(),
     companyName: z.string(),
-    position: z.string().nullable(),
-    salary: z.number().nullable(),
-    salaryType: z.enum(["expected", "offered"]).nullable(),
-    currency: z.string().nullable(),
-    workModel: z.enum(["remote", "hybrid", "onsite"]).nullable(),
-    regime: z.enum(["clt", "pj", "other"]).nullable(),
-    description: z.string().nullable(),
+    position: z.string().optional(),
+    salary: z.number().optional(),
+    salaryType: z.enum(["expected", "offered"]).optional(),
+    currency: z.string().optional(),
+    workModel: z.enum(["remote", "hybrid", "onsite"]).optional(),
+    regime: z.enum(["clt", "pj", "other"]).optional(),
+    description: z.string().optional(),
     status: z.enum([
       "applied",
       "reply",
@@ -20,8 +20,7 @@ const createApplicationBodySchema = z
       "accepted",
     ]),
     columnIndex: z.number(),
-    appliedAt: z.date().nullable(),
-    userId: z.string(),
+    appliedAt: z.string().optional(),
   })
   .refine(
     (data) => {
@@ -36,25 +35,34 @@ const createApplicationBodySchema = z
     },
   );
 
-const batchEditApplicationBodySchema = z
+export const batchEditApplicationBodySchema = z
   .object({
     id: z.string(),
+    status: z.enum([
+      "applied",
+      "reply",
+      "interview",
+      "offer",
+      "rejected",
+      "accepted",
+    ]),
     columnIndex: z.number(),
   })
   .array();
 
-const getApplicationsResponseSchema = z
+export const getApplicationsResponseSchema = z
   .object({
     id: z.string(),
     title: z.string(),
-    position: z.string(),
-    companyName: z.string(),
+    position: z.string().nullable(),
+    companyName: z.string().nullable(),
+    appliedAt: z.string().nullable(),
+    columnIndex: z.number(),
     status: z.string(),
-    appliedAt: z.date().nullable(),
   })
   .array();
 
-const getAppllicationByIdResponseSchema = z.object({
+export const getApplicationByIdResponseSchema = z.object({
   id: z.string(),
   title: z.string(),
   companyName: z.string(),
@@ -73,20 +81,28 @@ const getAppllicationByIdResponseSchema = z.object({
     "rejected",
     "accepted",
   ]),
-  appliedAt: z.date().nullable(),
+  columnIndex: z.number(),
+  appliedAt: z.string().nullable(),
+  applicationLinks: z
+    .object({
+      id: z.string(),
+      label: z.string().nullable(),
+      url: z.string(),
+    })
+    .array(),
 });
 
-export type createApplicationPayload = z.infer<
+export type CreateApplicationPayload = z.infer<
   typeof createApplicationBodySchema
 >;
-export type batchEditApplicationPayload = z.infer<
+export type BatchEditApplicationPayload = z.infer<
   typeof batchEditApplicationBodySchema
 >;
 
-export type getApplicationsResponse = z.infer<
+export type GetApplicationsResponse = z.infer<
   typeof getApplicationsResponseSchema
 >;
 
-export type getApplicationByIdResponse = z.infer<
-  typeof getAppllicationByIdResponseSchema
+export type GetApplicationByIdResponse = z.infer<
+  typeof getApplicationByIdResponseSchema
 >;

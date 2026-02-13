@@ -12,6 +12,7 @@ import {
   type ZodTypeProvider,
 } from "fastify-type-provider-zod";
 import { authRoutes } from "./modules/auth/auth.routes.js";
+import { applicationRoutes } from "./modules/application/application.routes.js";
 
 const fastify = Fastify({
   logger: {
@@ -25,8 +26,9 @@ fastify.setValidatorCompiler(validatorCompiler);
 fastify.setSerializerCompiler(serializerCompiler);
 
 fastify.register(fastifySensible);
+
 fastify.register(fastifyCors, {
-  origin: ["http://localhost:5173", "http://localhost:5174"],
+  origin: ["http://localhost:5173"],
 });
 
 if (!process.env.AUTH0_DOMAIN || !process.env.AUTH0_AUDIENCE) {
@@ -52,11 +54,8 @@ fastify.setErrorHandler((error: FastifyError, request, reply) => {
   });
 });
 
-fastify.get("/", (_, reply) => {
-  reply.send({ ok: true });
-});
-
 fastify.register(authRoutes, { prefix: "/auth" });
+fastify.register(applicationRoutes, { prefix: "/applications" });
 
 async function main() {
   try {

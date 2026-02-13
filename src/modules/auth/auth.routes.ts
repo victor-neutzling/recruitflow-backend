@@ -1,25 +1,26 @@
 import type { FastifyPluginAsync, FastifyRequest } from "fastify";
 import {
-  createUserBodySchema,
+  syncUserBodySchema,
   userResponseSchema,
-  type createUserPayload,
+  type syncUserPayload,
 } from "./auth.schema.js";
 import { AuthService } from "./auth.service.js";
 
-export const authRoutes: FastifyPluginAsync = async (fastify, options) => {
-  const authService = new AuthService(fastify);
+export const authRoutes: FastifyPluginAsync = async (fastify) => {
+  const authService = new AuthService();
 
-  fastify.post(
+  fastify.put(
     "/callback",
     {
       preHandler: fastify.requireAuth(),
       schema: {
+        body: syncUserBodySchema,
         response: {
           200: userResponseSchema,
         },
       },
     },
-    async (request: FastifyRequest<{ Body: createUserPayload }>, reply) => {
+    async (request: FastifyRequest<{ Body: syncUserPayload }>, reply) => {
       const user = await authService.syncUser(request.user.sub, request.body);
 
       reply.send(user);

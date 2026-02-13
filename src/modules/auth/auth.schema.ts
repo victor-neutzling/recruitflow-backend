@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createUserBodySchema = z.object({
+export const syncUserBodySchema = z.object({
   name: z.string().min(2),
   email: z.string(),
 });
@@ -12,5 +12,5 @@ export const userResponseSchema = z.object({
   email: z.string(),
 });
 
-export type createUserPayload = z.infer<typeof createUserBodySchema>;
+export type syncUserPayload = z.infer<typeof syncUserBodySchema>;
 export type userResponse = z.infer<typeof userResponseSchema>;
