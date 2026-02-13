@@ -11,7 +11,7 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from "fastify-type-provider-zod";
-import { userRoutes } from "./modules/user/user.routes.js";
+import { authRoutes } from "./modules/auth/auth.routes.js";
 
 const fastify = Fastify({
   logger: {
@@ -26,7 +26,7 @@ fastify.setSerializerCompiler(serializerCompiler);
 
 fastify.register(fastifySensible);
 fastify.register(fastifyCors, {
-  origin: ["http://localhost:5173"],
+  origin: ["http://localhost:5173", "http://localhost:5174"],
 });
 
 if (!process.env.AUTH0_DOMAIN || !process.env.AUTH0_AUDIENCE) {
@@ -56,19 +56,7 @@ fastify.get("/", (_, reply) => {
   reply.send({ ok: true });
 });
 
-fastify.get(
-  "/test-protected",
-  {
-    preHandler: fastify.requireAuth({
-      scopes: ["read:applications"],
-    }),
-  },
-  (request, reply) => {
-    reply.send({ auth: true, token: request.headers.authorization });
-  },
-);
-
-fastify.register(userRoutes, { prefix: "/users" });
+fastify.register(authRoutes, { prefix: "/auth" });
 
 async function main() {
   try {
