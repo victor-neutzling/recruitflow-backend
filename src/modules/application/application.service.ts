@@ -3,6 +3,8 @@ import repo from "./application.repository.js";
 import type {
   BatchEditApplicationPayload,
   CreateApplicationPayload,
+  GetApplicationsResponse,
+  ShortenedApplication,
 } from "./application.schema.js";
 
 export class ApplicationService {
@@ -22,12 +24,31 @@ export class ApplicationService {
   async getApplications(auth0Id: string) {
     const data = await repo.findMany(auth0Id);
 
-    const normalizedData = data.map((item) => ({
+    const normalizedData: ShortenedApplication[] = data.map((item) => ({
       ...item,
-      ...(item.appliedAt && { appliedAt: item.appliedAt?.toISOString() }),
-    }));
+      appliedAt: item.appliedAt
+        ? item.appliedAt instanceof Date
+          ? item.appliedAt.toISOString()
+          : item.appliedAt
+        : null,
+    })) as ShortenedApplication[];
 
-    return normalizedData;
+    const grouped: GetApplicationsResponse = {
+      applied: [],
+      reply: [],
+      interview: [],
+      offer: [],
+      rejected: [],
+      accepted: [],
+    };
+
+    normalizedData.forEach((item) => {
+      if (grouped[item.status as keyof GetApplicationsResponse]) {
+        grouped[item.status as keyof GetApplicationsResponse].push(item);
+      }
+    });
+
+    return grouped;
   }
 
   async getApplicationById(applicationId: string, auth0Id: string) {

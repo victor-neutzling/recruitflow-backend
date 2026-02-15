@@ -50,17 +50,31 @@ export const batchEditApplicationBodySchema = z
   })
   .array();
 
-export const getApplicationsResponseSchema = z
-  .object({
-    id: z.string(),
-    title: z.string(),
-    position: z.string().nullable(),
-    companyName: z.string().nullable(),
-    appliedAt: z.string().nullable(),
-    columnIndex: z.number(),
-    status: z.string(),
-  })
-  .array();
+export const shortenedApplicationSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  position: z.string().nullable(),
+  companyName: z.string().nullable(),
+  appliedAt: z.string().nullable(),
+  columnIndex: z.number(),
+  status: z.enum([
+    "applied",
+    "reply",
+    "interview",
+    "offer",
+    "rejected",
+    "accepted",
+  ]),
+});
+
+export const getApplicationsResponseSchema = z.object({
+  applied: z.array(shortenedApplicationSchema),
+  reply: z.array(shortenedApplicationSchema),
+  interview: z.array(shortenedApplicationSchema),
+  offer: z.array(shortenedApplicationSchema),
+  rejected: z.array(shortenedApplicationSchema),
+  accepted: z.array(shortenedApplicationSchema),
+});
 
 export const getApplicationByIdResponseSchema = z.object({
   id: z.string(),
@@ -91,6 +105,8 @@ export const getApplicationByIdResponseSchema = z.object({
     })
     .array(),
 });
+
+export type ShortenedApplication = z.infer<typeof shortenedApplicationSchema>;
 
 export type CreateApplicationPayload = z.infer<
   typeof createApplicationBodySchema
