@@ -13,8 +13,8 @@ export const createApplicationBodySchema = z // also serves for edit application
     description: z.string().optional(),
     status: z.enum([
       "applied",
-      "reply",
       "interview",
+      "inProgress",
       "offer",
       "rejected",
       "accepted",
@@ -40,8 +40,8 @@ export const batchEditApplicationBodySchema = z
     id: z.string(),
     status: z.enum([
       "applied",
-      "reply",
       "interview",
+      "inProgress",
       "offer",
       "rejected",
       "accepted",
@@ -59,8 +59,8 @@ export const shortenedApplicationSchema = z.object({
   columnIndex: z.number(),
   status: z.enum([
     "applied",
-    "reply",
     "interview",
+    "inProgress",
     "offer",
     "rejected",
     "accepted",
@@ -69,8 +69,8 @@ export const shortenedApplicationSchema = z.object({
 
 export const getApplicationsResponseSchema = z.object({
   applied: z.array(shortenedApplicationSchema),
-  reply: z.array(shortenedApplicationSchema),
   interview: z.array(shortenedApplicationSchema),
+  inProgress: z.array(shortenedApplicationSchema),
   offer: z.array(shortenedApplicationSchema),
   rejected: z.array(shortenedApplicationSchema),
   accepted: z.array(shortenedApplicationSchema),
@@ -89,8 +89,8 @@ export const getApplicationByIdResponseSchema = z.object({
   description: z.string().nullable(),
   status: z.enum([
     "applied",
-    "reply",
     "interview",
+    "inProgress",
     "offer",
     "rejected",
     "accepted",

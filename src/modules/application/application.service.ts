@@ -35,8 +35,8 @@ export class ApplicationService {
 
     const grouped: GetApplicationsResponse = {
       applied: [],
-      reply: [],
       interview: [],
+      inProgress: [],
       offer: [],
       rejected: [],
       accepted: [],
