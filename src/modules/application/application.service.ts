@@ -7,6 +7,15 @@ import type {
   ShortenedApplication,
 } from "./application.schema.js";
 
+type groupedApplications = {
+  applied: ShortenedApplication[];
+  interview: ShortenedApplication[];
+  inProgress: ShortenedApplication[];
+  offer: ShortenedApplication[];
+  rejected: ShortenedApplication[];
+  accepted: ShortenedApplication[];
+};
+
 export class ApplicationService {
   constructor(private httpErrors: FastifyInstance["httpErrors"]) {}
 
@@ -16,6 +25,7 @@ export class ApplicationService {
     const normalizedData = {
       ...data,
       ...(data.appliedAt && { appliedAt: data.appliedAt?.toISOString() }),
+      applicationLinks: [],
     };
 
     return normalizedData;
@@ -33,7 +43,7 @@ export class ApplicationService {
         : null,
     })) as ShortenedApplication[];
 
-    const grouped: GetApplicationsResponse = {
+    const grouped: groupedApplications = {
       applied: [],
       interview: [],
       inProgress: [],
@@ -43,12 +53,12 @@ export class ApplicationService {
     };
 
     normalizedData.forEach((item) => {
-      if (grouped[item.status as keyof GetApplicationsResponse]) {
-        grouped[item.status as keyof GetApplicationsResponse].push(item);
+      if (grouped[item.status as keyof groupedApplications]) {
+        grouped[item.status as keyof groupedApplications].push(item);
       }
     });
 
-    return grouped;
+    return { applications: grouped, total: data.length };
   }
 
   async getApplicationById(applicationId: string, auth0Id: string) {

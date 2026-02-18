@@ -68,12 +68,15 @@ export const shortenedApplicationSchema = z.object({
 });
 
 export const getApplicationsResponseSchema = z.object({
-  applied: z.array(shortenedApplicationSchema),
-  interview: z.array(shortenedApplicationSchema),
-  inProgress: z.array(shortenedApplicationSchema),
-  offer: z.array(shortenedApplicationSchema),
-  rejected: z.array(shortenedApplicationSchema),
-  accepted: z.array(shortenedApplicationSchema),
+  applications: z.object({
+    applied: z.array(shortenedApplicationSchema),
+    interview: z.array(shortenedApplicationSchema),
+    inProgress: z.array(shortenedApplicationSchema),
+    offer: z.array(shortenedApplicationSchema),
+    rejected: z.array(shortenedApplicationSchema),
+    accepted: z.array(shortenedApplicationSchema),
+  }),
+  total: z.number(),
 });
 
 export const getApplicationByIdResponseSchema = z.object({
