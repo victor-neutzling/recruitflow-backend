@@ -106,7 +106,8 @@ export const getApplicationByIdResponseSchema = z.object({
       label: z.string().nullable(),
       url: z.string(),
     })
-    .array(),
+    .array()
+    .optional(),
 });
 
 export type ShortenedApplication = z.infer<typeof shortenedApplicationSchema>;

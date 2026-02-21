@@ -41,8 +41,8 @@ model Application {
   status String // applied / reply / interview / offer / rejected / accepted
   columnIndex Int @map("column_index")
 
-  user             User              @relation(fields: [userId], references: [id])
-  applicationLinks ApplicationLink[]
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  applicationLinks ApplicationLink[] 
 
   @@map("applications")
 }
@@ -54,7 +54,7 @@ model ApplicationLink {
   label String?
   url   String
 
-  application Application @relation(fields: [applicationId], references: [id])
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
   @@map("application_links")
 }

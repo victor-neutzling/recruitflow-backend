@@ -86,7 +86,6 @@ export const applicationRoutes: FastifyPluginAsync = async (fastify) => {
     {
       preHandler: fastify.requireAuth(),
       schema: {
-        // body: createApplicationBodySchema,
         response: {
           200: getApplicationByIdResponseSchema,
         },
@@ -104,6 +103,7 @@ export const applicationRoutes: FastifyPluginAsync = async (fastify) => {
         request.params.id,
         request.body,
       );
+
       reply.send(application);
     },
   );
