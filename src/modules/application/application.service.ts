@@ -3,6 +3,7 @@ import repo from "./application.repository.js";
 import type {
   BatchEditApplicationPayload,
   CreateApplicationPayload,
+  GetApplicationByIdResponse,
   GetApplicationsResponse,
   ShortenedApplication,
 } from "./application.schema.js";
@@ -15,6 +16,15 @@ type groupedApplications = {
   rejected: ShortenedApplication[];
   accepted: ShortenedApplication[];
 };
+
+const applicationStatuses = [
+  "applied",
+  "interview",
+  "inProgress",
+  "offer",
+  "rejected",
+  "accepted",
+];
 
 export class ApplicationService {
   constructor(private httpErrors: FastifyInstance["httpErrors"]) {}
@@ -104,6 +114,59 @@ export class ApplicationService {
     }
 
     return repo.updateMany(auth0Id, payload);
+  }
+
+  async moveApplicationForward(auth0Id: string, applicationId: string) {
+    const applications = await this.getApplications(auth0Id);
+    const application = await repo.findById(applicationId, auth0Id);
+
+    if (!application) {
+      throw this.httpErrors.notFound("application not found");
+    }
+
+    if (application.status === "accepted") {
+      throw this.httpErrors.badRequest("application already at last stage");
+    }
+    applicationStatuses.some((status, index) => {
+      if (application.status === status) {
+        const column =
+          applications.applications[
+            applicationStatuses[
+              index
+            ] as keyof GetApplicationsResponse["applications"]
+          ];
+
+        application.status = applicationStatuses[index + 1]!;
+        application.columnIndex = column.length;
+        return true;
+      }
+      return false;
+    });
+
+    const [data] = await repo.update(auth0Id, applicationId, {
+      title: application.title,
+      columnIndex: application.columnIndex,
+      companyName: application.companyName,
+      status: application.status as ShortenedApplication["status"],
+      appliedAt: application.appliedAt?.toISOString(),
+      currency: application.currency!,
+      description: application.description!,
+      position: application.position!,
+      regime: (application.regime as GetApplicationByIdResponse["regime"])!,
+      salary: application.salary!,
+      salaryType:
+        (application.salaryType as GetApplicationByIdResponse["salaryType"])!,
+      workModel:
+        (application.workModel as GetApplicationByIdResponse["workModel"])!,
+    });
+
+    const normalizedData = {
+      ...data,
+      ...(data?.appliedAt && { appliedAt: data.appliedAt?.toISOString() }),
+      applicationLinks: [],
+    };
+
+    return normalizedData;
   }
 
   async deleteApplication(auth0Id: string, applicationId: string) {

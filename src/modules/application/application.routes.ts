@@ -107,6 +107,29 @@ export const applicationRoutes: FastifyPluginAsync = async (fastify) => {
       reply.send(application);
     },
   );
+
+  fastify.patch<{
+    Params: { id: string };
+  }>(
+    "/moveforward/:id",
+    {
+      preHandler: fastify.requireAuth(),
+      schema: {
+        response: {
+          200: getApplicationByIdResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      const application = await applicationService.moveApplicationForward(
+        request.user.sub,
+        request.params.id,
+      );
+
+      reply.send(application);
+    },
+  );
+
   fastify.patch(
     "/",
     {
