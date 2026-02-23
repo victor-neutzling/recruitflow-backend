@@ -24,9 +24,15 @@ export const applicationRoutes: FastifyPluginAsync = async (fastify) => {
         },
       },
     },
-    async (request: FastifyRequest, reply) => {
+    async (
+      request: FastifyRequest<{ Querystring: { search?: string } }>,
+      reply,
+    ) => {
+      const { search } = request.query;
+
       const applications = await applicationService.getApplications(
         request.user.sub,
+        search,
       );
 
       reply.send(applications);

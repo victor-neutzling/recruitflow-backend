@@ -41,8 +41,8 @@ export class ApplicationService {
     return normalizedData;
   }
 
-  async getApplications(auth0Id: string) {
-    const data = await repo.findMany(auth0Id);
+  async getApplications(auth0Id: string, search?: string) {
+    const data = await repo.findMany(auth0Id, search);
 
     const normalizedData: ShortenedApplication[] = data.map((item) => ({
       ...item,

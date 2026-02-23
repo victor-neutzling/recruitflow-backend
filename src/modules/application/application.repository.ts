@@ -10,12 +10,21 @@ class ApplicationRepository {
       data: toPrismaApplication(payload, userId),
     });
   }
-  findMany(auth0Id: string) {
+  findMany(auth0Id: string, search?: string) {
     return prismaClient.application.findMany({
       where: {
         user: {
           auth0Id,
         },
+        ...(search && {
+          OR: [
+            { title: { contains: search, mode: "insensitive" } },
+            {
+              position: { contains: search, mode: "insensitive" },
+            },
+            { companyName: { contains: search, mode: "insensitive" } },
+          ],
+        }),
       },
       orderBy: {
         columnIndex: "asc",
