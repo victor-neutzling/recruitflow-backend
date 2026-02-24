@@ -25,14 +25,38 @@ export const applicationRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
     async (
-      request: FastifyRequest<{ Querystring: { search?: string } }>,
+      request: FastifyRequest<{
+        Querystring: {
+          search?: string;
+          salaryMin?: number;
+          salaryMax?: number;
+          workModel?: string;
+          regime?: string;
+          appliedFrom?: string;
+          appliedTo?: string;
+        };
+      }>,
       reply,
     ) => {
-      const { search } = request.query;
+      const {
+        search,
+        appliedFrom,
+        appliedTo,
+        regime,
+        salaryMax,
+        salaryMin,
+        workModel,
+      } = request.query;
 
       const applications = await applicationService.getApplications(
         request.user.sub,
         search,
+        salaryMin,
+        salaryMax,
+        workModel,
+        regime,
+        appliedFrom,
+        appliedTo,
       );
 
       reply.send(applications);

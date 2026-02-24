@@ -10,32 +10,63 @@ class ApplicationRepository {
       data: toPrismaApplication(payload, userId),
     });
   }
-  findMany(auth0Id: string, search?: string) {
+  findMany(
+    auth0Id: string,
+    search?: string,
+    salaryMin?: number,
+    salaryMax?: number,
+    workModel?: string,
+    regime?: string,
+    appliedFrom?: Date,
+    appliedTo?: Date,
+  ) {
     return prismaClient.application.findMany({
       where: {
         user: {
           auth0Id,
         },
+
         ...(search && {
           OR: [
             { title: { contains: search, mode: "insensitive" } },
-            {
-              position: { contains: search, mode: "insensitive" },
-            },
+            { position: { contains: search, mode: "insensitive" } },
             { companyName: { contains: search, mode: "insensitive" } },
           ],
         }),
+
+        ...(salaryMin !== undefined || salaryMax !== undefined
+          ? {
+              salary: {
+                ...(salaryMin !== undefined && { gte: salaryMin }),
+                ...(salaryMax !== undefined && { lte: salaryMax }),
+              },
+            }
+          : {}),
+
+        ...(workModel && { workModel }),
+
+        ...(regime && { regime }),
+
+        ...(appliedFrom || appliedTo
+          ? {
+              appliedAt: {
+                ...(appliedFrom && { gte: appliedFrom }),
+                ...(appliedTo && { lte: appliedTo }),
+              },
+            }
+          : {}),
       },
+
       orderBy: {
         columnIndex: "asc",
       },
+
       select: {
         id: true,
         title: true,
         appliedAt: true,
         position: true,
         companyName: true,
-
         columnIndex: true,
         status: true,
       },

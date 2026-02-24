@@ -41,8 +41,29 @@ export class ApplicationService {
     return normalizedData;
   }
 
-  async getApplications(auth0Id: string, search?: string) {
-    const data = await repo.findMany(auth0Id, search);
+  async getApplications(
+    auth0Id: string,
+    search?: string,
+    salaryMin?: number,
+    salaryMax?: number,
+    workModel?: string,
+    regime?: string,
+    appliedFrom?: string,
+    appliedTo?: string,
+  ) {
+    const appliedFromDate = appliedFrom ? new Date(appliedFrom) : undefined;
+    const appliedToDate = appliedTo ? new Date(appliedTo) : undefined;
+
+    const data = await repo.findMany(
+      auth0Id,
+      search,
+      salaryMin,
+      salaryMax,
+      workModel,
+      regime,
+      appliedFromDate,
+      appliedToDate,
+    );
 
     const normalizedData: ShortenedApplication[] = data.map((item) => ({
       ...item,
