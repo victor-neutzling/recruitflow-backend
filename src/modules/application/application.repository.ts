@@ -4,6 +4,18 @@ import type {
   CreateApplicationPayload,
 } from "./application.schema.js";
 import { toPrismaApplication } from "./utils/mappers.js";
+
+type FindManyParams = {
+  auth0Id: string;
+  search?: string;
+  salaryMin?: number;
+  salaryMax?: number;
+  workModel?: string;
+  regime?: string;
+  appliedFrom?: Date;
+  appliedTo?: Date;
+};
+
 class ApplicationRepository {
   create(payload: CreateApplicationPayload, userId: string) {
     return prismaClient.application.create({

@@ -44,8 +44,8 @@ export class ApplicationService {
   async getApplications(
     auth0Id: string,
     search?: string,
-    salaryMin?: number,
-    salaryMax?: number,
+    salaryMin?: string,
+    salaryMax?: string,
     workModel?: string,
     regime?: string,
     appliedFrom?: string,
@@ -54,11 +54,14 @@ export class ApplicationService {
     const appliedFromDate = appliedFrom ? new Date(appliedFrom) : undefined;
     const appliedToDate = appliedTo ? new Date(appliedTo) : undefined;
 
+    const salaryMinNumber = parseFloat(salaryMin!) || undefined;
+    const salaryMaxNumber = parseFloat(salaryMax!) || undefined;
+
     const data = await repo.findMany(
       auth0Id,
       search,
-      salaryMin,
-      salaryMax,
+      salaryMinNumber,
+      salaryMaxNumber,
       workModel,
       regime,
       appliedFromDate,

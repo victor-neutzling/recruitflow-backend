@@ -28,8 +28,8 @@ export const applicationRoutes: FastifyPluginAsync = async (fastify) => {
       request: FastifyRequest<{
         Querystring: {
           search?: string;
-          salaryMin?: number;
-          salaryMax?: number;
+          salaryMin?: string;
+          salaryMax?: string;
           workModel?: string;
           regime?: string;
           appliedFrom?: string;
