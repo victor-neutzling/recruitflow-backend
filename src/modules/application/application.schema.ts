@@ -108,6 +108,14 @@ export const getApplicationByIdResponseSchema = z.object({
     })
     .array()
     .optional(),
+  deadlines: z
+    .object({
+      id: z.string(),
+      label: z.string(),
+      date: z.string(),
+    })
+    .array()
+    .optional(),
 });
 
 export type ShortenedApplication = z.infer<typeof shortenedApplicationSchema>;

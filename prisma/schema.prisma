@@ -43,6 +43,7 @@ model Application {
 
   user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   applicationLinks ApplicationLink[] 
+  deadlines Deadline[]
 
   @@map("applications")
 }
@@ -57,4 +58,16 @@ model ApplicationLink {
   application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
   @@map("application_links")
+}
+
+model Deadline {
+  id String @id @default(uuid()) @db.Uuid
+  applicationId String @db.Uuid
+  
+  label String
+  date DateTime
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@map("deadlines")
 }

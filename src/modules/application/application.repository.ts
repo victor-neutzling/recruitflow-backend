@@ -109,6 +109,7 @@ class ApplicationRepository {
         columnIndex: true,
 
         applicationLinks: true,
+        deadlines: { orderBy: { date: "asc" } },
       },
     });
   }

@@ -105,6 +105,10 @@ export class ApplicationService {
     const normalizedData = {
       ...data,
       ...(data.appliedAt && { appliedAt: data.appliedAt?.toISOString() }),
+      deadlines: data.deadlines.map((deadline) => ({
+        ...deadline,
+        date: deadline.date.toISOString(),
+      })),
     };
 
     return normalizedData;
