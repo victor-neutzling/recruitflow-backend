@@ -12,6 +12,8 @@ export class DeadlineService {
     const normalizedData = data.map((deadline) => ({
       ...deadline,
       date: deadline.date.toISOString(),
+      applicationTitle: deadline.application.title,
+      applicationid: deadline.applicationId,
     }));
 
     return { deadlines: normalizedData, count: data.length };

@@ -4,6 +4,17 @@ import type { DeadlinePayload } from "./deadline.schema.js";
 class DeadlineRepository {
   findMany(auth0Id: string) {
     return prismaClient.deadline.findMany({
+      select: {
+        application: {
+          select: {
+            title: true,
+          },
+        },
+        applicationId: true,
+        date: true,
+        id: true,
+        label: true,
+      },
       where: {
         application: {
           user: {

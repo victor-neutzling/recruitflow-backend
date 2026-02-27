@@ -14,7 +14,15 @@ export const deadlineResponseSchema = z.object({
 });
 
 export const getDeadlinesResponseSchema = z.object({
-  deadlines: deadlineResponseSchema.array(),
+  deadlines: z
+    .object({
+      id: z.string(),
+      applicationId: z.string(),
+      applicationTitle: z.string(),
+      label: z.string(),
+      date: z.string(),
+    })
+    .array(),
   count: z.number(),
 });
 
