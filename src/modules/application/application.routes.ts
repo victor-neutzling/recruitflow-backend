@@ -99,6 +99,8 @@ export const applicationRoutes: FastifyPluginAsync = async (fastify) => {
     ) => {
       const userId = await authService.getUserId(request.user.sub);
 
+      console.log(userId);
+
       if (!userId) {
         throw fastify.httpErrors.notFound();
       }

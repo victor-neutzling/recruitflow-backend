@@ -109,6 +109,10 @@ export class ApplicationService {
         ...deadline,
         date: deadline.date.toISOString(),
       })),
+      notes: data.notes.map((note) => ({
+        ...note,
+        date: note.date.toISOString(),
+      })),
     };
 
     return normalizedData;

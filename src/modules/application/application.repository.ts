@@ -110,6 +110,7 @@ class ApplicationRepository {
 
         applicationLinks: true,
         deadlines: { orderBy: { date: "asc" } },
+        notes: { orderBy: { date: "asc" } },
       },
     });
   }

@@ -42,8 +42,10 @@ model Application {
   columnIndex Int @map("column_index")
 
   user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
   applicationLinks ApplicationLink[] 
   deadlines Deadline[]
+  notes Note[]
 
   @@map("applications")
 }
@@ -70,4 +72,16 @@ model Deadline {
   application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
   @@map("deadlines")
+}
+
+model Note {
+  id String @id @default(uuid()) @db.Uuid
+  applicationId String @db.Uuid
+  
+  text String
+  date DateTime
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@map("notes")
 }

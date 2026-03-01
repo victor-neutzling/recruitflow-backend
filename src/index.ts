@@ -15,6 +15,7 @@ import { authRoutes } from "./modules/auth/auth.routes.js";
 import { applicationRoutes } from "./modules/application/application.routes.js";
 import { applicationLinkRoutes } from "./modules/application-link/application-link.routes.js";
 import { deadlineRoutes } from "./modules/deadline/deadline.routes.js";
+import { noteRoutes } from "./modules/note/note.routes.js";
 
 const fastify = Fastify({
   logger: {
@@ -66,6 +67,9 @@ fastify.register(applicationLinkRoutes, {
 });
 fastify.register(deadlineRoutes, {
   prefix: "/applications/deadlines",
+});
+fastify.register(noteRoutes, {
+  prefix: "/applications/notes",
 });
 
 async function main() {
